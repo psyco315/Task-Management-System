@@ -44,6 +44,21 @@ const getTask = async (req, res, Model) => {
   }
 };
 
+const getGivenTask = async (req, res, Model) => {
+  try {
+    const { id } = req.params;
+    const task = await Model.findById(id);
+
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    res.status(200).json({ task });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const updateTask = async (req, res, Model) => {
   try {
     const { id } = req.params;
@@ -77,4 +92,38 @@ const deleteTask = async (req, res, Model) => {
   }
 };
 
-export { testTask, createTask, getTask, updateTask, deleteTask }
+const uploadPdf = async (req, res, Task) => {
+  try {
+    console.log("Uploaded file info:", req.file);
+    const { id } = req.params;
+
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    const fileUrl = req.file.url || req.file.path;
+    if (!fileUrl) return res.status(500).json({ error: "File not uploaded to Cloudinary" });
+
+
+    const updatedTask = await Task.findByIdAndUpdate(
+      id,
+      { $push: { attachments: fileUrl } },
+      { new: true }
+    );
+
+    if (!updatedTask) {
+      return res.status(404).json({ error: "Task not found" });
+    }
+
+    res.status(200).json({
+      message: "PDF uploaded and task updated",
+      task: updatedTask
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+export { testTask, createTask, getTask, getGivenTask, updateTask, deleteTask, uploadPdf }

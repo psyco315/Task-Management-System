@@ -1,5 +1,7 @@
 import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import dotenv from 'dotenv';
+dotenv.config();
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -11,8 +13,9 @@ const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: 'pdfs',
-    resource_type: 'raw', // for non-images like PDF
-    allowed_formats: ['pdf'],
+    resource_type: 'raw',  // Important for PDFs
+    format: 'pdf',         // Ensures it's treated as a PDF
+    public_id: (req, file) => `${Date.now()}-${file.originalname.replace('.pdf', '')}`, 
   },
 });
 

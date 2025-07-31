@@ -1,13 +1,19 @@
 import express from 'express'
 import Task from '../models/task.js'
-const router = express.Router()
+import multer from 'multer';
+import { storage } from '../database/cloudinary.js';
 
-import { testTask, createTask, getTask, updateTask, deleteTask } from '../controllers/task.js'
+const router = express.Router()
+const upload = multer({ storage });
+
+import { testTask, createTask, getTask, getGivenTask, updateTask, deleteTask, uploadPdf } from '../controllers/task.js'
 
 router.route('/test').get((req, res) => testTask(req, res, Task))
 router.route('/').post((req, res) => createTask(req, res, Task))
 router.route('/').get((req, res) => getTask(req, res, Task))
+router.route('/:id').get((req, res) => getGivenTask(req, res, Task))
 router.route('/:id').put((req, res) => updateTask(req, res, Task))
 router.route('/:id').delete((req, res) => deleteTask(req, res, Task))
+router.put('/:id/upload', upload.single('file'), (req, res) => uploadPdf(req, res, Task));
 
 export default router
