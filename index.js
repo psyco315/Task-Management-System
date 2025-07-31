@@ -6,6 +6,7 @@ dotenv.config();
 
 import connectDB from './database/connect.js';
 import taskRouter from './routes/task.js'
+import userRouter from "./routes/user.js"
 import errorMiddleware from './middleware/error-handler.js'
 import notFoundMiddleware from './middleware/not-found.js'
 
@@ -27,6 +28,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/task', taskRouter)
+app.use('/user', userRouter)
 
 
 // Error handling
