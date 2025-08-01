@@ -1,15 +1,14 @@
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react'
 
-const GroupContext = createContext();
+export const GroupContext = createContext({
+  currGroup: '',
+  setCurrGroup: () => {},
+  groups: [],
+  setGroups: () => {},
+})
 
-export const useGroup = () => useContext(GroupContext);
+export const GroupProvider = GroupContext.Provider
 
-export const GroupProvider = ({ children }) => {
-  const [currGroup, setCurrGroup] = useState('');
-  
-  return (
-    <GroupContext.Provider value={{ currGroup, setCurrGroup }}>
-      {children}
-    </GroupContext.Provider>
-  );
-};
+export default function useGroup() {
+  return useContext(GroupContext)
+}

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../contexts/user';
@@ -17,6 +17,10 @@ const SignIn = () => {
       });
 
       if (res.data.success) {
+        // Save token and user to localStorage
+        localStorage.setItem('authToken', res.data.token);
+        localStorage.setItem('user', JSON.stringify(res.data.user));
+
         setCurrUser(res.data.user);
         navigate('/task');
       } else {
@@ -27,6 +31,17 @@ const SignIn = () => {
       alert('Login failed');
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    const user = localStorage.getItem('user');
+
+    if (token && user) {
+      setCurrUser(JSON.parse(user));
+      navigate('/task');
+    }
+  }, []);
+
 
   return (
     <div className="flex flex-col justify-center items-center w-3/4 h-screen">

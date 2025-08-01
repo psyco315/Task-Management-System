@@ -1,32 +1,48 @@
 import axios from "axios";
 import TaskRow from "./TaskRow";
 import { useEffect, useState } from "react";
+import EditTask from "./EditTask";
 
-const TaskGrid = () => {
-    const [tasks, setTasks] = useState([]);
+const TaskGrid = ({ tasks, fetchTasks, groupId }) => {
     const [sortKey, setSortKey] = useState("");
     const [sortOrder, setSortOrder] = useState("asc");
+    const [contextMenu, setContextMenu] = useState({
+        visible: false,
+        x: 0,
+        y: 0,
+        task: null,
+    });
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    const [taskToEdit, setTaskToEdit] = useState(null);
 
-    const getData = async (url) => {
+    const handleEdit = (task) => {
+        setTaskToEdit(task);
+        setEditModalOpen(true);
+    };
+
+    const handleDelete = async (task) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this task?");
+        if (!confirmDelete) return;
+
         try {
-            const response = await axios.get(url);
-            return response.data;
-        } catch (error) {
-            console.error("Error fetching data:", error);
-            return [];
+            await axios.delete(`http://localhost:3000/task/${task._id}`);
+            fetchTasks();     // Refresh task list
+            setEditModalOpen(false)   // Close the modal
+        } catch (err) {
+            console.error(err);
+            alert('Failed to delete task');
         }
     };
 
-    const reqURL = "http://localhost:3000/task";
-
     useEffect(() => {
-        const fetchTasks = async () => {
-            const data = await getData(reqURL);
-            setTasks(data.tasks); // assuming API returns { tasks: [...] }
-        };
-
         fetchTasks();
     }, []);
+
+    useEffect(() => {
+        const handleClickOutside = () => setContextMenu({ ...contextMenu, visible: false });
+        window.addEventListener('click', handleClickOutside);
+        return () => window.removeEventListener('click', handleClickOutside);
+    }, [contextMenu]);
 
     const handleSort = (key) => {
         const newOrder = sortKey === key && sortOrder === "asc" ? "desc" : "asc";
@@ -82,7 +98,7 @@ const TaskGrid = () => {
     ];
 
     return (
-        <div className="overflow-auto p-5 shadow-xl border border-white/20 backdrop-blur-md">
+        <div className="overflow-auto h-full p-5 shadow-xl border border-white/20 backdrop-blur-md">
             <table className="min-w-full table-auto text-sm text-left text-white bg-white/10">
                 <thead className="bg-black/20 text-white uppercase text-xs tracking-wider">
                     <tr>
@@ -104,10 +120,51 @@ const TaskGrid = () => {
                 </thead>
                 <tbody className="divide-y divide-white/10">
                     {sortedTasks.map((task) => (
-                        <TaskRow key={task._id} task={task} />
+                        <TaskRow
+                            key={task._id}
+                            task={task}
+                            onRightClick={(e) => {
+                                e.preventDefault();
+                                setContextMenu({
+                                    visible: true,
+                                    x: e.pageX,
+                                    y: e.pageY,
+                                    task,
+                                });
+                            }}
+                        />
                     ))}
                 </tbody>
             </table>
+
+            {contextMenu.visible && (
+                <div
+                    className="absolute z-50 bg-white text-black rounded shadow-lg w-36"
+                    style={{ top: contextMenu.y - 110, left: contextMenu.x }}
+                    onClick={() => setContextMenu({ ...contextMenu, visible: false })}
+                >
+                    <button
+                        onClick={() => handleEdit(contextMenu.task)}
+                        className="block w-full px-4 py-2 hover:bg-gray-200 text-left"
+                    >
+                        Edit
+                    </button>
+                    <button
+                        onClick={() => handleDelete(contextMenu.task)}
+                        className="block w-full px-4 py-2 hover:bg-red-100 text-left"
+                    >
+                        Delete
+                    </button>
+                </div>
+            )}
+
+            <EditTask
+                isOpen={editModalOpen}
+                task={taskToEdit}
+                onClose={() => setEditModalOpen(false)}
+                onSave={fetchTasks}
+            />
+
         </div>
     );
 };

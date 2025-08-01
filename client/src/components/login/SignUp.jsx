@@ -39,8 +39,8 @@ const SignUp = () => {
 
       const { user, token } = res.data;
       localStorage.setItem("token", token);
-      setCurrUser(user._id); // 👈 Set context
-      navigate("/task");     // 👈 Navigate to /task
+      setCurrUser(user._id);
+      navigate("/task"); 
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed.");
     }

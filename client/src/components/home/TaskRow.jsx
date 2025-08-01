@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const TaskRow = ({ task }) => {
+const TaskRow = ({ task, onRightClick }) => {
     const [expanded, setExpanded] = useState(false);
     const description = task.description || "";
     const maxLength = 60;
@@ -35,7 +35,7 @@ const TaskRow = ({ task }) => {
     };
 
     return (
-        <tr className="hover:bg-white/10 transition duration-150 text-black/50 hover:text-black/80 hover:cursor-default">
+        <tr onContextMenu={onRightClick} className="hover:bg-white/10 transition duration-150 text-black/50 hover:text-black/80 hover:cursor-default">
             <td className="px-4 py-3">{task.title}</td>
 
             <td
