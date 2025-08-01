@@ -1,14 +1,19 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import LoginBase from './components/login/Base.jsx'
+import HomeBase from './components/home/Base.jsx'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [userList, setUserList] = useState([])
+  const [currUser, setCurrUser] = useState('')
 
   return (
     <>
-      <h1>Hello</h1>
+      <Routes>
+        <Route path="/" element={<LoginBase />} />
+        <Route path="/task" element={<HomeBase />} />
+      </Routes>
     </>
   )
 }
