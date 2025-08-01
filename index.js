@@ -8,6 +8,8 @@ import connectDB from './database/connect.js';
 import taskRouter from './routes/task.js'
 import userRouter from "./routes/user.js"
 import adminRouter from "./routes/admin.js"
+import groupRouter from "./routes/group.js"
+import authRouter from "./routes/auth.js"
 import errorMiddleware from './middleware/error-handler.js'
 import notFoundMiddleware from './middleware/not-found.js'
 
@@ -32,9 +34,11 @@ app.get('/', (req, res) => {
   res.send('Hello from Express!');
 });
 
+app.use('/auth', authRouter)
 app.use('/task', taskRouter)
 app.use('/user', userRouter)
 app.use('/admin', adminRouter)
+app.use('/group', groupRouter)
 
 
 // Error handling

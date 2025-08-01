@@ -15,6 +15,17 @@ const createUser = async (req, res, Model) => {
   }
 };
 
+const getAllUsers = async (req, res, Model) => {
+  try {
+    const users = await Model.find().select('-password'); // exclude password from all
+
+    res.status(200).json({ users });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 const getUser = async (req, res, Model) => {
   try {
     const { id } = req.params;
@@ -72,4 +83,4 @@ const deleteUser = async (req, res, Model) => {
   }
 };
 
-export { createUser, getUser, updateUser, deleteUser };
+export { createUser, getAllUsers, getUser, updateUser, deleteUser };

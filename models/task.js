@@ -24,17 +24,20 @@ const taskSchema = new mongoose.Schema({
     type: Date,
   },
   assignedTo: {
-    type: String, // You can change this to mongoose.Schema.Types.ObjectId if referencing a User model
+    type: String, // Optional: convert to ObjectId if linking to User
     default: '',
   },
   attachments: {
     type: [String], // Array of file URLs or names
     default: [],
-  }
+  },
+  group: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Group',
+    required: true, // ensure every task belongs to a group
+  },
 }, { timestamps: true });
 
-
-// The collection will be named "tasks"
 const Task = mongoose.model('Task', taskSchema);
 
 export default Task;

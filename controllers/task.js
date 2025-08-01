@@ -1,11 +1,10 @@
 const testTask = async (req, res, Model) => {
-    const result = [
-        { title: 'Sample Task 1', isCompleted: false },
-        { title: 'Sample Task 2', isCompleted: true }
-    ];
-
-    res.status(200).json({ result, nbHits: result.length })
-}
+  const result = [
+    { title: 'Sample Task 1', isCompleted: false },
+    { title: 'Sample Task 2', isCompleted: true }
+  ];
+  res.status(200).json({ result, nbHits: result.length });
+};
 
 const createTask = async (req, res, Model) => {
   try {
@@ -16,7 +15,8 @@ const createTask = async (req, res, Model) => {
       priority,
       dueDate,
       assignedTo,
-      attachments
+      attachments,
+      group // NEW
     } = req.body;
 
     const newTask = await Model.create({
@@ -26,7 +26,8 @@ const createTask = async (req, res, Model) => {
       priority,
       dueDate,
       assignedTo,
-      attachments
+      attachments,
+      group
     });
 
     res.status(201).json({ task: newTask });
@@ -37,7 +38,7 @@ const createTask = async (req, res, Model) => {
 
 const getTask = async (req, res, Model) => {
   try {
-    const tasks = await Model.find();
+    const tasks = await Model.find(); // no .populate()
     res.status(200).json({ tasks, count: tasks.length });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -47,7 +48,7 @@ const getTask = async (req, res, Model) => {
 const getGivenTask = async (req, res, Model) => {
   try {
     const { id } = req.params;
-    const task = await Model.findById(id);
+    const task = await Model.findById(id); // no .populate()
 
     if (!task) {
       return res.status(404).json({ message: "Task not found" });
@@ -59,12 +60,31 @@ const getGivenTask = async (req, res, Model) => {
   }
 };
 
+const getTasksByGroup = async (req, res, Model) => {
+  try {
+    const { groupId } = req.params;
+
+    if (!groupId) {
+      return res.status(400).json({ error: "Group ID is required" });
+    }
+
+    const tasks = await Model.find({ group: groupId });
+
+    res.status(200).json({
+      tasks,
+      count: tasks.length
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const updateTask = async (req, res, Model) => {
   try {
     const { id } = req.params;
     const updatedTask = await Model.findByIdAndUpdate(id, req.body, {
-      new: true,       // Return the updated document
-      runValidators: true, // Enforce schema validation
+      new: true,
+      runValidators: true,
     });
 
     if (!updatedTask) {
@@ -104,7 +124,6 @@ const uploadPdf = async (req, res, Task) => {
     const fileUrl = req.file.url || req.file.path;
     if (!fileUrl) return res.status(500).json({ error: "File not uploaded to Cloudinary" });
 
-
     const updatedTask = await Task.findByIdAndUpdate(
       id,
       { $push: { attachments: fileUrl } },
@@ -125,5 +144,13 @@ const uploadPdf = async (req, res, Task) => {
   }
 };
 
-
-export { testTask, createTask, getTask, getGivenTask, updateTask, deleteTask, uploadPdf }
+export {
+  testTask,
+  createTask,
+  getTask,
+  getTasksByGroup,
+  getGivenTask,
+  updateTask,
+  deleteTask,
+  uploadPdf
+};
