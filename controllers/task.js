@@ -16,7 +16,8 @@ const createTask = async (req, res, Model) => {
       dueDate,
       assignedTo,
       attachments,
-      group // NEW
+      group,
+      createdBy // Sent from frontend
     } = req.body;
 
     const newTask = await Model.create({
@@ -27,7 +28,8 @@ const createTask = async (req, res, Model) => {
       dueDate,
       assignedTo,
       attachments,
-      group
+      group,
+      createdBy
     });
 
     res.status(201).json({ task: newTask });
@@ -35,6 +37,7 @@ const createTask = async (req, res, Model) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 const getTask = async (req, res, Model) => {
   try {

@@ -20,9 +20,7 @@ const PORT = 3000;
 
 // Middlewares
 app.use(cors({
-  origin: 'http://localhost:5173', // allow frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
+  origin: 'http://localhost:5173'
 }));
 app.use(express.urlencoded({ extended: true }))
 app.use(bodyParser.json());

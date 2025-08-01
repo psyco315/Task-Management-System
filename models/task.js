@@ -36,6 +36,11 @@ const taskSchema = new mongoose.Schema({
     ref: 'Group',
     required: true, // ensure every task belongs to a group
   },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true, // every task must be created by a user
+  },
 }, { timestamps: true });
 
 const Task = mongoose.model('Task', taskSchema);

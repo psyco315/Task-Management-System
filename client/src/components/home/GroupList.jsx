@@ -1,7 +1,10 @@
 import React from 'react'
 import GroupCard from './GroupCard'
+import { useUser } from '../../contexts/user'
 
 const GroupList = ({ groups, onSelect }) => {
+    const { currUser } = useUser()
+
     return (
         <div className="w-full flex-1 overflow-auto flex flex-wrap">
             {groups.map((group, idx) => (

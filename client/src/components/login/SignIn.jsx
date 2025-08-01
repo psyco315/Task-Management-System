@@ -1,21 +1,23 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../contexts/user';
 
-const SignIn = ({ setCurrUser }) => {
+const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { setCurrUser } = useUser()
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post('http://localhost:3000/login', {
+      const res = await axios.post('http://localhost:3000/auth/signin', {
         email,
         password,
       });
 
       if (res.data.success) {
-        setCurrUser(res.data.user); // You should get the user object from backend
+        setCurrUser(res.data.user);
         navigate('/task');
       } else {
         alert(res.data.message || 'Login failed');

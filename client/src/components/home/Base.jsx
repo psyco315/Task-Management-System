@@ -3,11 +3,14 @@ import axios from 'axios'
 import TaskGrid from './TaskGrid'
 import GroupList from './GroupList'
 import { GroupProvider } from '../../contexts/group'
+import { useUser } from '../../contexts/user'
 
 const Base = () => {
+    const [adminMode, setAdminMode] = useState(false)
     const [groups, setGroups] = useState([])
     const [currGroup, setCurrGroup] = useState('')
-    const [currUser, setCurrUser] = useState('')
+    const { currUser } = useUser()
+    
 
     const fetchGroups = async () => {
         try {

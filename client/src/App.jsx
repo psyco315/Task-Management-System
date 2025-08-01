@@ -6,13 +6,11 @@ import HomeBase from './components/home/Base.jsx';
 
 function App() {
   const [userList, setUserList] = useState([]);
-  const [currUser, setCurrUser] = useState('');
 
   const fetchUsers = async () => {
     try {
       const response = await axios.get('http://localhost:3000/user');
-      setUserList(response.data.users); // assuming API returns { users: [...] }
-      console.log(response.data.users);
+      setUserList(response.data.users);
 
     } catch (error) {
       console.error('Failed to fetch users:', error.message);
