@@ -57,18 +57,17 @@ cd task-manager
 ### 2. Backend Setup
 
 ```bash
-cd backend
 npm install
 ```
 
 Create a `.env` file inside the `backend/` directory:
 
 ```
-MONGODB_URI=your_mongodb_connection_string
-CLOUDINARY_CLOUD_NAME=your_cloudinary_name
-CLOUDINARY_API_KEY=your_cloudinary_key
-CLOUDINARY_API_SECRET=your_cloudinary_secret
-PORT=3000
+MONGODB_URI = your_mongodb_connection_string
+CLOUDINARY_CLOUD_NAME = your_cloudinary_name
+CLOUDINARY_API_KEY = your_cloudinary_key
+CLOUDINARY_API_SECRET = your_cloudinary_secret
+JWT_SECRET = your_jwt_secret
 ```
 
 Start the backend server:
@@ -82,7 +81,7 @@ npm run dev
 ### 3. Frontend Setup
 
 ```bash
-cd ../frontend
+cd client
 npm install
 npm run dev
 ```
@@ -116,21 +115,12 @@ npm run dev
 
 ---
 
-## 📸 Screenshots (Add Yours)
-
-* ✅ Task table with description truncation and hover
-* 📂 Attachment preview and download
-* 🤍 Members popup for each group
-* ↻ Status dropdown (when not in admin mode)
-
----
-
 ## ⚙️ Admin Mode
 
 Toggle using context `adminMode`:
 
-* If `true`, task status cannot be changed
-* If `false`, users can update task status via dropdown
+* If `true`, User can alter entries
+* If `false`, users cannot make modifications, except task status
 
 ---
 
