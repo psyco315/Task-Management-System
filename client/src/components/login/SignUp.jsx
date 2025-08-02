@@ -5,7 +5,11 @@ import { useUser } from "../../contexts/user"
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
-    name: "", email: "", password: "", confirmPassword: ""
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    role: "user"
   });
 
   const [error, setError] = useState("");
@@ -22,7 +26,7 @@ const SignUp = () => {
   const handleSubmit = async () => {
     setError("");
 
-    const { name, email, password, confirmPassword } = formData;
+    const { name, email, password, confirmPassword, role } = formData;
 
     if (!name || !email || !password || !confirmPassword) {
       return setError("All fields are required.");
@@ -32,16 +36,18 @@ const SignUp = () => {
       return setError("Passwords do not match.");
     }
 
+    console.log('submiting:', formData)
+
     try {
       const res = await axios.post("http://localhost:3000/auth/signup", {
-        name, email, password
+        name, email, password, role
       });
 
       const { user, token } = res.data;
       localStorage.setItem("authToken", token);
       localStorage.setItem('user', JSON.stringify(user));
 
-      setCurrUser(user._id);
+      setCurrUser(res.data.user);
       // console.log('User created: ', user._id)
       // console.log('User confirm: ', currUser)
       navigate('/group');
@@ -89,8 +95,39 @@ const SignUp = () => {
         placeholder="Confirm Password"
         value={formData.confirmPassword}
         onChange={handleChange}
-        className="w-4/5 mb-6 px-5 py-3 rounded-xl bg-white/10 text-white placeholder-white/70 backdrop-blur-md border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
+        className="w-4/5 mb-4 px-5 py-3 rounded-xl bg-white/10 text-white placeholder-white/70 backdrop-blur-md border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
       />
+
+      {/* Role Selection - Radio Buttons */}
+      <div className="w-4/5 mb-6">
+        <label className="block text-white/90 text-sm font-medium mb-3">
+          Select Role
+        </label>
+        <div className="flex gap-6">
+          <label className="flex items-center text-white/90 cursor-pointer">
+            <input
+              type="radio"
+              name="role"
+              value="user"
+              checked={formData.role === "user"}
+              onChange={handleChange}
+              className="mr-2 accent-white/70"
+            />
+            User
+          </label>
+          <label className="flex items-center text-white/90 cursor-pointer">
+            <input
+              type="radio"
+              name="role"
+              value="admin"
+              checked={formData.role === "admin"}
+              onChange={handleChange}
+              className="mr-2 accent-white/70"
+            />
+            Admin
+          </label>
+        </div>
+      </div>
 
       <button
         onClick={handleSubmit}
@@ -99,7 +136,6 @@ const SignUp = () => {
         Sign Up
       </button>
     </div>
-
   );
 };
 

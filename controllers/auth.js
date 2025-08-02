@@ -48,9 +48,9 @@ export const signIn = async (req, res, Model) => {
 
 export const signUp = async (req, res, Model) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, role } = req.body;
 
-        if (!name || !email || !password) {
+        if (!name || !email || !password || !role) {
             return res.status(400).json({ success: false, message: 'All fields are required' });
         }
 
@@ -64,7 +64,7 @@ export const signUp = async (req, res, Model) => {
             name,
             email,
             password,
-            role: 'user'
+            role
         });
 
         await newUser.save();
