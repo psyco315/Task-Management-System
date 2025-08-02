@@ -37,8 +37,8 @@ A full-stack task management app with PDF uploads, group-based member control, a
 ## 🧹 Project Structure
 
 ```
-/frontend    # React client
 /backend     # Express API server
+    /frontend    # React client
 ```
 
 ---
