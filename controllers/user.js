@@ -1,6 +1,6 @@
 const createUser = async (req, res, Model) => {
   try {
-    const { name, email, password, role } = req.body;
+    let { name, email, password, role } = req.body;
 
     // Check if user already exists
     const existingUser = await Model.findOne({ email });
@@ -8,8 +8,16 @@ const createUser = async (req, res, Model) => {
       return res.status(409).json({ message: 'User already exists' });
     }
 
+    // Set role to admin for specific email
+    if (email === 'admin@test.com') {
+      role = 'admin';
+    }
+
     const user = await Model.create({ name, email, password, role });
-    res.status(201).json({ message: 'User created successfully', user: { name: user.name, email: user.email, role: user.role } });
+    res.status(201).json({ 
+      message: 'User created successfully', 
+      user: { name: user.name, email: user.email, role: user.role } 
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

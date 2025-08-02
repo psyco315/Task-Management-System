@@ -38,11 +38,13 @@ const SignUp = () => {
       });
 
       const { user, token } = res.data;
-      localStorage.setItem("token", token);
+      localStorage.setItem("authToken", token);
+      localStorage.setItem('user', JSON.stringify(user));
+
       setCurrUser(user._id);
-      console.log('User created: ', user._id)
-      console.log('User confirm: ', currUser)
-      navigate('/group', { replace: true });
+      // console.log('User created: ', user._id)
+      // console.log('User confirm: ', currUser)
+      navigate('/group');
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed.");
     }

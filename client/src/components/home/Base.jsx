@@ -90,10 +90,18 @@ const Base = () => {
             <div className="w-screen h-screen flex flex-col bg-gradient-to-br from-blue-400 via-blue-700 to-violet-700 backdrop-blur-lg bg-opacity-30 text-white shadow-xl border border-white/20">
                 <div className="flex justify-between w-full px-7 py-5">
                     <div className='flex items-center'>
-                        <div className="text-[50px] w-[400px] font-semibold hover:cursor-default">
+                        <div className="w-[450px] font-semibold hover:cursor-default">
                             {currGroup === ''
                                 ? 'Your Groups'
-                                : groups.find(g => g._id === currGroup)?.name || 'Your Tasks'}
+                                : (<>
+                                    <div className='text-[50px] '>
+                                        {groups.find(g => g._id === currGroup)?.name}
+                                    </div>
+
+                                    <div className='text-[15px] text-white/50'>
+                                        Invite Code: {currGroup}
+                                    </div>
+                                </>) || 'Your Tasks'}
                         </div>
 
                         <div>
