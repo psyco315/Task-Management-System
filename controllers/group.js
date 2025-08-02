@@ -58,23 +58,54 @@ export const getGroupsByUserId = async (req, res, Model) => {
 export const updateGroup = async (req, res, Model) => {
     try {
         const { id } = req.params;
-        const { members } = req.body;
+        const { name, members } = req.body;
 
-        const updatedGroup = await Model.findByIdAndUpdate(
-            id,
-            { members },
-            { new: true }
-        ).populate('members', '-password');
+        const group = await Model.findById(id);
+        if (!group) return res.status(404).json({ message: 'Group not found' });
 
-        if (!updatedGroup) {
-            return res.status(404).json({ message: 'Group not found' });
+        if (name !== undefined) group.name = name;
+
+        if (members !== undefined) {
+            // Ensure members is an array
+            const newMembers = Array.isArray(members) ? members : [members];
+
+            newMembers.forEach(memberId => {
+                if (!group.members.includes(memberId)) {
+                    group.members.push(memberId);
+                }
+            });
         }
 
-        res.status(200).json({ group: updatedGroup });
+        const updatedGroup = await group.save();
+        const populatedGroup = await updatedGroup.populate('members', '-password');
+
+        res.status(200).json({ group: populatedGroup });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
+
+export const joinGroup = async (req, res, Model) => {
+    try {
+        const { id } = req.params;
+        const { userId } = req.body;
+
+        const group = await Model.findById(id);
+        if (!group) return res.status(404).json({ message: 'Group not found' });
+
+        if (!group.members.includes(userId)) {
+            group.members.push(userId);
+            await group.save();
+        }
+
+        const populated = await group.populate('members', '-password');
+        res.status(200).json({ group: populated });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
 
 export const deleteGroup = async (req, res, Model) => {
     try {

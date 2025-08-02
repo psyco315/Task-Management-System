@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../contexts/user"
@@ -9,7 +9,7 @@ const SignUp = () => {
   });
 
   const [error, setError] = useState("");
-  const { setCurrUser } = useUser();
+  const { currUser, setCurrUser } = useUser();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -40,7 +40,9 @@ const SignUp = () => {
       const { user, token } = res.data;
       localStorage.setItem("token", token);
       setCurrUser(user._id);
-      navigate("/task"); 
+      console.log('User created: ', user._id)
+      console.log('User confirm: ', currUser)
+      navigate('/group', { replace: true });
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed.");
     }

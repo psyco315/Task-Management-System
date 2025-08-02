@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import SignIn from './SignIn.jsx';
 import SignUp from './SignUp.jsx';
 import SignMenu from './SignMenu.jsx';
@@ -14,6 +15,12 @@ const Base = () => {
     const changeCurrComp = (newComp) => {
         setCurrComp(newComp)
     }
+
+    // useEffect(() => {
+    //   console.log(currComp)
+    
+    // }, [currComp])
+    
 
     return (
         <SignProvider value={{ currComp, changeCurrComp }}>

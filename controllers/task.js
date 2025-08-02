@@ -1,3 +1,5 @@
+import { cloudinary } from "../database/cloudinary.js";
+
 const testTask = async (req, res, Model) => {
   const result = [
     { title: 'Sample Task 1', isCompleted: false },
@@ -117,7 +119,7 @@ const deleteTask = async (req, res, Model) => {
 
 const uploadPdf = async (req, res, Task) => {
   try {
-    console.log("Uploaded file info:", req.file);
+    // console.log("Uploaded file info:", req.file);
     const { id } = req.params;
 
     if (!req.file) {
@@ -126,6 +128,7 @@ const uploadPdf = async (req, res, Task) => {
 
     const fileUrl = req.file.url || req.file.path;
     if (!fileUrl) return res.status(500).json({ error: "File not uploaded to Cloudinary" });
+    // console.log(fileUrl)
 
     const updatedTask = await Task.findByIdAndUpdate(
       id,
@@ -147,6 +150,37 @@ const uploadPdf = async (req, res, Task) => {
   }
 };
 
+const deletePdf = async (req, res, Model) => {
+  try {
+    const { id } = req.params;
+    const { fileUrl } = req.body;
+
+    if (!fileUrl) {
+      return res.status(400).json({ error: 'Missing fileUrl' });
+    }
+
+    // Extract publicId from the fileUrl
+    const parts = fileUrl.split('/');
+    const fileName = parts[parts.length - 1]; // e.g., "1754107379710-ssc applcn form 25.pdf"
+    const publicId = `pdfs/${fileName.replace('.pdf', '')}`;
+
+    // Delete from Cloudinary
+    await cloudinary.uploader.destroy(publicId, { resource_type: 'raw' });
+
+    // Update MongoDB: remove the URL from the attachments array
+    const updated = await Model.findByIdAndUpdate(
+      id,
+      { $pull: { attachments: fileUrl } },
+      { new: true }
+    );
+
+    res.status(200).json({ success: true, updated });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to delete PDF' });
+  }
+};
+
 export {
   testTask,
   createTask,
@@ -155,5 +189,6 @@ export {
   getGivenTask,
   updateTask,
   deleteTask,
-  uploadPdf
+  uploadPdf,
+  deletePdf
 };

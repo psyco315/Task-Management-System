@@ -13,10 +13,12 @@ const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: 'pdfs',
-    resource_type: 'raw',  // Important for PDFs
-    format: 'pdf',         // Ensures it's treated as a PDF
-    public_id: (req, file) => `${Date.now()}-${file.originalname.replace('.pdf', '')}`, 
+    resource_type: 'raw',
+    format: 'pdf',
+    type: 'upload', // <- ensure it's normal public upload
+    public_id: (req, file) => `${Date.now()}-${file.originalname.replace('.pdf', '')}`,
   },
 });
+
 
 export { cloudinary, storage };

@@ -10,6 +10,43 @@ const AddTask = ({ onTaskAdded }) => {
     const [formVisible, setFormVisible] = useState(false)
     const [successPopup, setSuccessPopup] = useState(false)
     const [members, setMembers] = useState([])
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const handleFileChange = (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length > 3) {
+            alert("Can't upload more than 3 files.");
+            return;
+        }
+        setSelectedFiles(files);
+    };
+
+    const uploadPdfToTask = async (taskId, files) => {
+        for (const file of files) {
+            const formData = new FormData();
+            formData.append("file", file);
+            var fileCount = 0
+
+            try {
+                const res = await axios.put(`http://localhost:3000/task/${taskId}/upload`, formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                });
+
+                fileCount = res.data.task.attachments.length
+                // console.log(`Uploaded ${file.name}:`, res.data);
+            } catch (err) {
+                console.error(`Error uploading ${file.name}:`, err);
+            }
+
+            if (fileCount >= 3) {
+                return
+            }
+        }
+    };
+
 
     useEffect(() => {
         const fetchGroupMembers = async () => {
@@ -64,16 +101,12 @@ const AddTask = ({ onTaskAdded }) => {
         setForm({ ...form, [name]: value })
     }
 
-    const handleFileChange = (e) => {
-        const files = Array.from(e.target.files).map(f => f.name)
-        setForm({ ...form, attachments: files })
-    }
-
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
             const taskData = {
                 ...form,
+                attachments: [],
                 group: currGroup,
                 createdBy: currUser._id,
             }
@@ -89,8 +122,27 @@ const AddTask = ({ onTaskAdded }) => {
                     assignedTo: '',
                     attachments: [],
                 })
-                setFormVisible(false)
-                setSuccessPopup(true)
+
+                const task = res.data.task
+                if (task.attachments.length >= 3) {
+                    console.error("Only 3 file uploads allowed")
+                    return
+                }
+
+                // console.log("Adding attachments to", taskId)
+                if (selectedFiles.length === 0) {
+                    console.error("No file selected")
+                    return
+                }
+
+                setFormVisible(false);
+                setLoading(true); // Show loading popup
+
+                await uploadPdfToTask(task._id, selectedFiles);
+
+                setLoading(false); // Hide loading popup
+                setSuccessPopup(true);
+
             }
         } catch (error) {
             console.error('Error creating task:', error.message)
@@ -108,7 +160,7 @@ const AddTask = ({ onTaskAdded }) => {
             {!formVisible && (
                 <button
                     onClick={() => setFormVisible(true)}
-                    className="bg-green-600 text-white px-4 py-2 rounded shadow"
+                    className="bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-500"
                 >
                     Add Task
                 </button>
@@ -117,7 +169,7 @@ const AddTask = ({ onTaskAdded }) => {
             {/* Task Form Popup */}
             {formVisible && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
-                    <div className="bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364] bg-opacity-90 text-white p-6 rounded shadow-lg space-y-4 w-full max-w-md backdrop-blur-md border border-white/10">
+                    <div className="bg-white text-black p-6 rounded shadow-lg space-y-4 w-full max-w-md backdrop-blur-md border border-white/10">
                         <form onSubmit={handleSubmit} className="space-y-3">
                             <input
                                 type="text"
@@ -126,20 +178,20 @@ const AddTask = ({ onTaskAdded }) => {
                                 value={form.title}
                                 onChange={handleChange}
                                 required
-                                className="w-full p-2 rounded bg-white/10 text-white placeholder-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
+                                className="w-full p-2 rounded bg-white/10 text-black placeholder-black border border-black/20 focus:outline-none focus:ring-2 focus:ring-black/40"
                             />
                             <textarea
                                 name="description"
                                 placeholder="Description"
                                 value={form.description}
                                 onChange={handleChange}
-                                className="w-full p-2 rounded bg-white/10 text-white placeholder-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
+                                className="w-full p-2 rounded bg-white/10 text-black placeholder-black border border-black/20 focus:outline-none focus:ring-2 focus:ring-black/40"
                             />
                             <select
                                 name="status"
                                 value={form.status}
                                 onChange={handleChange}
-                                className="w-full p-2 rounded bg-white/10 text-white placeholder-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
+                                className="w-full p-2 rounded bg-white/10 text-black placeholder-black border border-black/20 focus:outline-none focus:ring-2 focus:ring-black/40"
                             >
                                 <option value="pending" className='bg-black'>Pending</option>
                                 <option value="in-progress" className='bg-black'>In Progress</option>
@@ -149,7 +201,7 @@ const AddTask = ({ onTaskAdded }) => {
                                 name="priority"
                                 value={form.priority}
                                 onChange={handleChange}
-                                className="w-full p-2 rounded bg-white/10 text-white placeholder-white/60 border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
+                                className="w-full p-2 rounded bg-white/10 text-black placeholder-black/60 border border-black/20 focus:outline-none focus:ring-2 focus:ring-black/40"
                             >
                                 <option value="low" className='bg-black'>Low</option>
                                 <option value="medium" className='bg-black'>Medium</option>
@@ -160,27 +212,28 @@ const AddTask = ({ onTaskAdded }) => {
                                 name="dueDate"
                                 value={form.dueDate}
                                 onChange={handleChange}
-                                className="w-full p-2 rounded bg-white/10 text-white placeholder-white/60 border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
+                                className="w-full p-2 rounded bg-white/10 text-black placeholder-black/60 border border-black/20 focus:outline-none focus:ring-2 focus:ring-black/40"
                             />
                             <select
                                 name="assignedTo"
                                 value={form.assignedTo}
                                 onChange={handleChange}
-                                className="w-full p-2 rounded bg-white/10 text-white placeholder-white/60 border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
+                                className="w-full p-2 rounded bg-white/10 text-black placeholder-black/60 border border-black/20 focus:outline-none focus:ring-2 focus:ring-black/40"
                                 required
                             >
-                                <option value="" className='bg-black'>Assign to member...</option>
+                                <option value="" className='bg-white text-black'>Assign to member...</option>
                                 {members.map(member => (
-                                    <option key={member._id} value={member._id} className='bg-black'>
+                                    <option key={member._id} value={member._id} className='bg-white text-black'>
                                         {member.email}
                                     </option>
                                 ))}
                             </select>
                             <input
                                 type="file"
+                                accept=".pdf"
                                 multiple
                                 onChange={handleFileChange}
-                                className="w-full p-2 rounded bg-white/10 text-white placeholder-white/60 border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40 file:text-white file:bg-white/10 file:border-none file:rounded file:px-2 file:py-1 file:mr-2"
+                                className="w-full p-2 rounded bg-white/10 text-black placeholder-black/60 border border-black/20 focus:outline-none focus:ring-2 focus:ring-black/40 file:text-black file:bg-black/10 file:border-none file:rounded file:px-2 file:py-1 file:mr-2"
                             />
                             <div className="flex gap-4">
                                 <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
@@ -195,6 +248,14 @@ const AddTask = ({ onTaskAdded }) => {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {loading && (
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div className="bg-white/40 text-black p-4 rounded shadow-lg">
+                        <p>Uploading PDF...</p>
                     </div>
                 </div>
             )}

@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import TaskGrid from './TaskGrid'
+import SignOut from './SignOut'
 import GroupList from './GroupList'
 import AddTask from './AddTask'
+import Members from './Members'
 import { GroupProvider } from '../../contexts/group'
 import { useUser } from '../../contexts/user'
-import { AdminModeProvider } from '../../contexts/admin'
+import { useAdminMode } from '../../contexts/admin'
 
 const Base = () => {
-    const [adminMode, setAdminMode] = useState(false)
+    const { adminMode, setAdminMode } = useAdminMode()
     const [groups, setGroups] = useState([])
     const [currGroup, setCurrGroup] = useState('')
     const { currUser } = useUser()
@@ -32,25 +34,63 @@ const Base = () => {
     const fetchGroups = async () => {
         try {
             const response = await axios.get('http://localhost:3000/group')
+            // console.log(response.data.groups)
             setGroups(response.data.groups)
         } catch (error) {
             console.error('Error fetching groups:', error.message)
         }
     }
 
-    useEffect(() => {
-        if (currUser) {
-            setAdminMode(true)
-            fetchGroups();
+    const fetchCurrUser = async (currUser) => {
+        // console.log(currUser)
+        if (!currUser) {
+            console.error("Invalid user object");
+            return null;
         }
-    }, [currUser]);
+
+        try {
+            const response = await axios.get(`http://localhost:3000/user/${currUser}`);
+            return response.data.user;
+        } catch (error) {
+            console.error("Failed to fetch user details:", error.message);
+            return null;
+        }
+    };
+
+    useEffect(() => {
+        const fetchUserAndGroups = async () => {
+            if (!currUser) return;
+
+            try {
+                // console.log('Curr user in home: ', currUser);
+                const currUserDetail = await fetchCurrUser(currUser._id); // ✅ await the result
+
+                // console.log(currUserDetail);
+
+                if (currUserDetail.role === 'admin') {
+                    // console.log('user is admin');
+                    setAdminMode(true);
+                } else {
+                    // console.log('user is not admin');
+                    setAdminMode(false);
+                }
+
+                fetchGroups(); // ✅ now fetch groups after setting adminMode
+            } catch (err) {
+                console.error("Failed to fetch user or groups:", err);
+            }
+        };
+
+        fetchUserAndGroups();
+    }, [currUser]); // ✅ no need to depend on adminMode
+
 
     return (
-        <AdminModeProvider>
-            <GroupProvider value={{ currGroup, setCurrGroup, groups, setGroups }}>
-                <div className="w-screen h-screen flex flex-col bg-gradient-to-br from-blue-400 via-blue-700 to-violet-700 backdrop-blur-lg bg-opacity-30 text-white shadow-xl border border-white/20">
-                    <div className="flex justify-between w-full px-7 py-5">
-                        <div className="text-[50px] font-semibold hover:cursor-default">
+        <GroupProvider value={{ currGroup, setCurrGroup, groups, setGroups }}>
+            <div className="w-screen h-screen flex flex-col bg-gradient-to-br from-blue-400 via-blue-700 to-violet-700 backdrop-blur-lg bg-opacity-30 text-white shadow-xl border border-white/20">
+                <div className="flex justify-between w-full px-7 py-5">
+                    <div className='flex items-center'>
+                        <div className="text-[50px] w-[400px] font-semibold hover:cursor-default">
                             {currGroup === ''
                                 ? 'Your Groups'
                                 : groups.find(g => g._id === currGroup)?.name || 'Your Tasks'}
@@ -58,32 +98,49 @@ const Base = () => {
 
                         <div>
                             {
-                                currGroup !== '' && (<AddTask onTaskAdded={fetchTasks} />)
+                                adminMode && currGroup !== '' && (<AddTask onTaskAdded={fetchTasks} />)
                             }
                         </div>
 
-                        <div className="flex space-x-4 hover:cursor-pointer">
-                            <div onClick={() => setCurrGroup('')}>Home</div>
-                            <div>About</div>
-                            <div>Logout</div>
+                        <div>
+                            { currGroup !== '' && (<Members currGroup={currGroup} />)}
                         </div>
                     </div>
 
+                    <div className="flex h-max space-x-4 hover:cursor-pointer">
+                        <button
+                            onClick={() => setCurrGroup('')}
+                            className="bg-white/40 text-black h-max px-4 py-2 rounded hover:bg-white/70"
+                        >
+                            <div>Home</div>
+                        </button>
 
-                    <div className="w-full flex-1 overflow-auto bg-white/80 text-black">
-                        {currGroup === '' ? (
-                            <GroupList
-                                groups={groups}
-                                onSelect={(id) => setCurrGroup(id)}
-                                updateGroup={fetchGroups}
-                            />
-                        ) : (
-                            <TaskGrid tasks={tasks} fetchTasks={fetchTasks} groupId={currGroup} />
-                        )}
+                        <button
+                            className="bg-white/40 text-black h-max px-4 py-2 rounded hover:bg-white/70"
+                        >
+                            <div>About</div>
+                        </button>
+
+                        <SignOut />
                     </div>
                 </div>
-            </GroupProvider>
-        </AdminModeProvider>
+
+
+                <div className="w-full h-full flex flex-col overflow-auto bg-white/80 text-black">
+                    <div className='pt-4 pl-6 opacity-50'>
+                        Right Click entries to edit them
+                    </div>
+                    {currGroup === '' ? (
+                        <GroupList
+                            onSelect={(id) => setCurrGroup(id)}
+                            updateGroup={fetchGroups}
+                        />
+                    ) : (
+                        <TaskGrid tasks={tasks} fetchTasks={fetchTasks} groupId={currGroup} />
+                    )}
+                </div>
+            </div>
+        </GroupProvider>
     )
 }
 

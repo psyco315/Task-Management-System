@@ -54,8 +54,8 @@ const AddGroup = ({ updateGroup }) => {
 
             {/* Group Name Input Modal */}
             {showForm && (
-                <div className="fixed inset-0 flex items-center justify-center z-50">
-                    <div className="bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364] bg-opacity-90 text-white p-6 rounded-2xl w-80 shadow-2xl  border border-white/20">
+                <div className="fixed bg-black/50 inset-0 flex items-center justify-center z-50">
+                    <div className="bg-white text-black p-6 rounded-2xl w-80 shadow-2xl  border border-white/20">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-xl font-semibold">Create Group</h2>
                             <button onClick={() => setShowForm(false)}>
@@ -68,12 +68,12 @@ const AddGroup = ({ updateGroup }) => {
                             placeholder="Group Name"
                             value={groupName}
                             onChange={(e) => setGroupName(e.target.value)}
-                            className="w-full px-4 py-2 rounded-lg bg-white/10 text-white placeholder-white/70 backdrop-blur-md border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40 mb-4"
+                            className="w-full px-4 py-2 rounded-lg bg-white/10 text-black placeholder-black/70 backdrop-blur-md border border-black/20 focus:outline-none focus:ring-2 focus:ring-black/40 mb-4"
                         />
 
                         <button
                             onClick={handleSubmit}
-                            className="w-full bg-white/10 text-white py-2 rounded-lg hover:bg-white/20 transition"
+                            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-black/20 transition"
                         >
                             Create
                         </button>

@@ -2,6 +2,7 @@ import axios from "axios";
 import TaskRow from "./TaskRow";
 import { useEffect, useState } from "react";
 import EditTask from "./EditTask";
+import { useAdminMode } from "../../contexts/admin";
 
 const TaskGrid = ({ tasks, fetchTasks, groupId }) => {
     const [sortKey, setSortKey] = useState("");
@@ -14,6 +15,7 @@ const TaskGrid = ({ tasks, fetchTasks, groupId }) => {
     });
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [taskToEdit, setTaskToEdit] = useState(null);
+    const { adminMode } = useAdminMode()
 
     const handleEdit = (task) => {
         setTaskToEdit(task);
@@ -84,7 +86,7 @@ const TaskGrid = ({ tasks, fetchTasks, groupId }) => {
         });
     };
 
-    const sortedTasks = getSortedTasks();
+    const sortedTasks = getSortedTasks().filter(task => task.group === groupId);
 
     const headers = [
         { label: "Title", key: "title" },
@@ -98,7 +100,7 @@ const TaskGrid = ({ tasks, fetchTasks, groupId }) => {
     ];
 
     return (
-        <div className="overflow-auto h-full p-5 shadow-xl border border-white/20 backdrop-blur-md">
+        <div className="overflow-auto h-full p-5 backdrop-blur-md">
             <table className="min-w-full table-auto text-sm text-left text-white bg-white/10">
                 <thead className="bg-black/20 text-white uppercase text-xs tracking-wider">
                     <tr>
@@ -137,10 +139,10 @@ const TaskGrid = ({ tasks, fetchTasks, groupId }) => {
                 </tbody>
             </table>
 
-            {contextMenu.visible && (
+            {adminMode && contextMenu.visible && (
                 <div
                     className="absolute z-50 bg-white text-black rounded shadow-lg w-36"
-                    style={{ top: contextMenu.y - 110, left: contextMenu.x }}
+                    style={{ top: contextMenu.y - 150, left: contextMenu.x }}
                     onClick={() => setContextMenu({ ...contextMenu, visible: false })}
                 >
                     <button
@@ -158,12 +160,14 @@ const TaskGrid = ({ tasks, fetchTasks, groupId }) => {
                 </div>
             )}
 
-            <EditTask
-                isOpen={editModalOpen}
-                task={taskToEdit}
-                onClose={() => setEditModalOpen(false)}
-                onSave={fetchTasks}
-            />
+            {adminMode && (
+                <EditTask
+                    isOpen={editModalOpen}
+                    task={taskToEdit}
+                    onClose={() => setEditModalOpen(false)}
+                    onSave={fetchTasks}
+                />
+            )}
 
         </div>
     );

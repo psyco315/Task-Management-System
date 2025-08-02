@@ -22,7 +22,7 @@ const SignIn = () => {
         localStorage.setItem('user', JSON.stringify(res.data.user));
 
         setCurrUser(res.data.user);
-        navigate('/task');
+        navigate('/group');
       } else {
         alert(res.data.message || 'Login failed');
       }
@@ -38,7 +38,7 @@ const SignIn = () => {
 
     if (token && user) {
       setCurrUser(JSON.parse(user));
-      navigate('/task');
+      navigate('/group');
     }
   }, []);
 
