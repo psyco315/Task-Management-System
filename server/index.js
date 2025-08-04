@@ -25,7 +25,7 @@ const PORT = process.env.PORT || 3000
 
 // Serve static files from Vite build
 app.use(express.static(path.join(__dirname, '../client/dist')));
-
+//
 
 // Middlewares
 app.use(cors({
@@ -49,7 +49,13 @@ app.use('/api/group', groupRouter)
 
 
 // Catch-all for frontend routing (React)
-app.get('*', (req, res) => {
+app.use((req, res, next) => {
+  // Skip API routes
+  if (req.path.startsWith('/api/')) {
+    return next();
+  }
+  
+  // Serve index.html for all other routes (SPA routing)
   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
