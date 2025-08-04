@@ -49,7 +49,7 @@ app.use('/api/group', groupRouter)
 
 
 // Catch-all for frontend routing (React)
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
