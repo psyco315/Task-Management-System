@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: task-backend
+    env: node
+    plan: free
+    buildCommand: cd server && npm install && cd ../client && npm install && npm run build
+    startCommand: node server/index.js
+    envVars:
+      - key: NODE_VERSION
+        value: 18
+      - key: MONGO_URI
+        value: <your_mongo_uri_here>
+    autoDeploy: true
