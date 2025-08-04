@@ -129,11 +129,11 @@ const AddTask = ({ onTaskAdded }) => {
                     return
                 }
 
-                // console.log("Adding attachments to", taskId)
-                if (selectedFiles.length === 0) {
-                    console.error("No file selected")
-                    return
-                }
+                // // console.log("Adding attachments to", taskId)
+                // if (selectedFiles.length === 0) {
+                //     console.error("No file selected")
+                //     return
+                // }
 
                 setFormVisible(false);
                 setLoading(true); // Show loading popup
@@ -193,9 +193,9 @@ const AddTask = ({ onTaskAdded }) => {
                                 onChange={handleChange}
                                 className="w-full p-2 rounded bg-white/10 text-black placeholder-black border border-black/20 focus:outline-none focus:ring-2 focus:ring-black/40"
                             >
-                                <option value="pending" className='bg-black'>Pending</option>
-                                <option value="in-progress" className='bg-black'>In Progress</option>
-                                <option value="completed" className='bg-black'>Completed</option>
+                                <option value="pending" className='bg-black/20'>Pending</option>
+                                <option value="in-progress" className='bg-black/20'>In Progress</option>
+                                <option value="completed" className='bg-black/20'>Completed</option>
                             </select>
                             <select
                                 name="priority"
@@ -203,9 +203,9 @@ const AddTask = ({ onTaskAdded }) => {
                                 onChange={handleChange}
                                 className="w-full p-2 rounded bg-white/10 text-black placeholder-black/60 border border-black/20 focus:outline-none focus:ring-2 focus:ring-black/40"
                             >
-                                <option value="low" className='bg-black'>Low</option>
-                                <option value="medium" className='bg-black'>Medium</option>
-                                <option value="high" className='bg-black'>High</option>
+                                <option value="low" className='bg-black/20'>Low</option>
+                                <option value="medium" className='bg-black/20'>Medium</option>
+                                <option value="high" className='bg-black/20'>High</option>
                             </select>
                             <input
                                 type="date"
@@ -223,7 +223,7 @@ const AddTask = ({ onTaskAdded }) => {
                             >
                                 <option value="" className='bg-white text-black'>Assign to member...</option>
                                 {members.map(member => (
-                                    <option key={member._id} value={member._id} className='bg-white text-black'>
+                                    <option key={member._id} value={member.email} className='bg-black/20 text-black'>
                                         {member.email}
                                     </option>
                                 ))}

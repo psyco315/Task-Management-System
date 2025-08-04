@@ -120,7 +120,7 @@ const GroupList = ({ onSelect, updateGroup }) => {
                             <button
                                 onClick={async () => {
                                     try {
-                                        await axios.put(`http://localhost:3000/group/${editingGroup._id}`, { name: editName });
+                                        await axios.put(`http://localhost:3000/api/group/${editingGroup._id}`, { name: editName });
                                         updateGroup(); // Refresh list
                                         setEditingGroup(null);
                                     } catch (err) {

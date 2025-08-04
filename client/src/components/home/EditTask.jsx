@@ -109,10 +109,10 @@ const EditTask = ({ isOpen, onClose, task, onSave }) => {
                     value={form?.priority || ''}
                     onChange={handleChange}
                 >
-                    <option value="" className='bg-black/30'>Select Priority</option>
-                    <option value="low" className='bg-black/30'>Low</option>
-                    <option value="medium" className='bg-black/30'>Medium</option>
-                    <option value="high" className='bg-black/30'>High</option>
+                    <option value="" className='bg-black/20'>Select Priority</option>
+                    <option value="low" className='bg-black/20'>Low</option>
+                    <option value="medium" className='bg-black/20'>Medium</option>
+                    <option value="high" className='bg-black/20'>High</option>
                 </select>
 
 
@@ -122,10 +122,10 @@ const EditTask = ({ isOpen, onClose, task, onSave }) => {
                     value={form?.status || ''}
                     onChange={handleChange}
                 >
-                    <option value="" className='bg-black/30'>Select Status</option>
-                    <option value="pending" className='bg-black/30'>Pending</option>
-                    <option value="in progress" className='bg-black/30'>In Progress</option>
-                    <option value="completed" className='bg-black/30'>Completed</option>
+                    <option value="" className='bg-black/20'>Select Status</option>
+                    <option value="pending" className='bg-black/20'>Pending</option>
+                    <option value="in progress" className='bg-black/20'>In Progress</option>
+                    <option value="completed" className='bg-black/20'>Completed</option>
                 </select>
 
                 <input
@@ -172,7 +172,7 @@ const EditTask = ({ isOpen, onClose, task, onSave }) => {
                 </div>
 
                 <div className="flex justify-end gap-2">
-                    <button onClick={onClose} className="px-4 py-2 bg-black/50 rounded">Cancel</button>
+                    <button onClick={onClose} className="px-4 py-2 bg-black/30 rounded">Cancel</button>
                     <button onClick={handleSubmit} className="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
                 </div>
             </div>
