@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useUser } from '../../contexts/user';
 import { Plus } from 'lucide-react';
 import axios from 'axios';
@@ -13,7 +13,7 @@ const JoinGroup = ({ updateGroup }) => {
         if (!currUser || !inviteCode) return;
 
         try {
-            const response = await axios.put(`http://localhost:3000/group/${inviteCode}/join`, {
+            const response = await axios.put(`http://localhost:3000/api/group/${inviteCode}/join`, {
                 userId: currUser
             });
 

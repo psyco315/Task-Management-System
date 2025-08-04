@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { Plus, X } from 'lucide-react';
 import { useUser } from '../../contexts/user';
@@ -15,7 +15,7 @@ const AddGroup = ({ updateGroup }) => {
         if (!currUser) return alert('User not logged in');
 
         try {
-            const res = await axios.post('http://localhost:3000/group', {
+            const res = await axios.post('http://localhost:3000/api/group', {
                 name: groupName.trim(),
                 members: [currUser._id],
                 createdBy: currUser._id,

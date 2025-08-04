@@ -17,6 +17,9 @@ const dbKey = process.env.DBKEY;
 const app = express();
 const PORT = 3000;
 
+// Serve static files from Vite build
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
 
 // Middlewares
 app.use(cors({
@@ -28,15 +31,15 @@ app.use(express.json())
 
 
 // Routes
-app.get('/', (req, res) => {
+app.get('/api/', (req, res) => {
   res.send('Hello from Express!');
 });
 
-app.use('/auth', authRouter)
-app.use('/task', taskRouter)
-app.use('/user', userRouter)
-app.use('/admin', adminRouter)
-app.use('/group', groupRouter)
+app.use('/api/auth', authRouter)
+app.use('/api/task', taskRouter)
+app.use('/api/user', userRouter)
+app.use('/api/admin', adminRouter)
+app.use('/api/group', groupRouter)
 
 
 // Error handling

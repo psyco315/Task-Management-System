@@ -1,9 +1,6 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const SignOut = () => {
-  const navigate = useNavigate();
-
   const handleSignOut = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("user"); // optional: if you store user ID or info

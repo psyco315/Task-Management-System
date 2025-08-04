@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import TaskGrid from './TaskGrid'
 import SignOut from './SignOut'
@@ -27,13 +27,13 @@ const Base = () => {
     };
 
     const fetchTasks = async () => {
-        const data = await getData("http://localhost:3000/task");
+        const data = await getData("http://localhost:3000/api/task");
         setTasks(data.tasks); // assuming API returns { tasks: [...] }
     };
 
     const fetchGroups = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/group')
+            const response = await axios.get('http://localhost:3000/api/group')
             // console.log(response.data.groups)
             setGroups(response.data.groups)
         } catch (error) {
@@ -49,7 +49,7 @@ const Base = () => {
         }
 
         try {
-            const response = await axios.get(`http://localhost:3000/user/${currUser}`);
+            const response = await axios.get(`http://localhost:3000/api/user/${currUser}`);
             return response.data.user;
         } catch (error) {
             console.error("Failed to fetch user details:", error.message);

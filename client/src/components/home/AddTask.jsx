@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useUser } from '../../contexts/user'
 import useGroup from '../../contexts/group'
@@ -29,7 +29,7 @@ const AddTask = ({ onTaskAdded }) => {
             var fileCount = 0
 
             try {
-                const res = await axios.put(`http://localhost:3000/task/${taskId}/upload`, formData, {
+                const res = await axios.put(`http://localhost:3000/api/task/${taskId}/upload`, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data"
                     }
@@ -111,7 +111,7 @@ const AddTask = ({ onTaskAdded }) => {
                 createdBy: currUser._id,
             }
 
-            const res = await axios.post('http://localhost:3000/task', taskData)
+            const res = await axios.post('http://localhost:3000/api/task', taskData)
             if (res.status === 201) {
                 setForm({
                     title: '',

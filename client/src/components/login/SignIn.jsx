@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../contexts/user';
@@ -11,7 +11,7 @@ const SignIn = () => {
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post('http://localhost:3000/auth/signin', {
+      const res = await axios.post('http://localhost:3000/api/auth/signin', {
         email,
         password,
       });

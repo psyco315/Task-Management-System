@@ -27,7 +27,7 @@ const TaskGrid = ({ tasks, fetchTasks, groupId }) => {
         if (!confirmDelete) return;
 
         try {
-            await axios.delete(`http://localhost:3000/task/${task._id}`);
+            await axios.delete(`http://localhost:3000/api/task/${task._id}`);
             fetchTasks();     // Refresh task list
             setEditModalOpen(false)   // Close the modal
         } catch (err) {

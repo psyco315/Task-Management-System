@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import GroupCard from './GroupCard';
 import { useUser } from '../../contexts/user';
@@ -39,7 +39,7 @@ const GroupList = ({ onSelect, updateGroup }) => {
             const confirm = window.confirm("Delete this group?");
             if (!confirm) return;
 
-            await axios.delete(`http://localhost:3000/group/${contextMenu.group._id}`);
+            await axios.delete(`http://localhost:3000/api/group/${contextMenu.group._id}`);
             updateGroup(); // Refresh group list
             handleCloseContext();
         } catch (err) {

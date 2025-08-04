@@ -39,7 +39,7 @@ const SignUp = () => {
     console.log('submiting:', formData)
 
     try {
-      const res = await axios.post("http://localhost:3000/auth/signup", {
+      const res = await axios.post("http://localhost:3000/api/auth/signup", {
         name, email, password, role
       });
 

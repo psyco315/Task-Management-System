@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { FileIcon } from 'lucide-react';
 import { useAdminMode } from "../../contexts/admin";
@@ -66,7 +66,7 @@ const TaskRow = ({ task, onRightClick }) => {
                             setStatus(newStatus);
                             setIsUpdating(true);
                             try {
-                                await axios.put(`http://localhost:3000/task/${task._id}`, {
+                                await axios.put(`http://localhost:3000/api/task/${task._id}`, {
                                     status: newStatus,
                                 });
                             } catch (err) {
