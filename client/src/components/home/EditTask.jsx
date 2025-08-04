@@ -36,7 +36,7 @@ const EditTask = ({ isOpen, onClose, task, onSave }) => {
         const taskId = form._id;
 
         try {
-            await axios.delete(`http://localhost:3000/api/task/${taskId}/deletepdf`, {
+            await axios.delete(`/api/task/${taskId}/deletepdf`, {
                 data: { fileUrl },  // axios requires `data` key in DELETE requests
             });
 
@@ -63,14 +63,14 @@ const EditTask = ({ isOpen, onClose, task, onSave }) => {
             const taskUpdate = { ...form };
             delete taskUpdate.attachments;  // don't send attachments directly
 
-            await axios.put(`http://localhost:3000/api/task/${task._id}`, taskUpdate);
+            await axios.put(`/api/task/${task._id}`, taskUpdate);
 
             if (selectedFiles.length > 0) {
                 setLoading(true)
                 for (const file of selectedFiles) {
                     const formData = new FormData();
                     formData.append("file", file);
-                    await axios.put(`http://localhost:3000/api/task/${task._id}/upload`, formData);
+                    await axios.put(`/api/task/${task._id}/upload`, formData);
                 }
             }
 

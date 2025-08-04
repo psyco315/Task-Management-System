@@ -9,7 +9,7 @@ const Members = ({ currGroup }) => {
     const fetchGroupMembers = async () => {
         try {
             setLoading(true);
-            const res = await axios.get('http://localhost:3000/api/group');
+            const res = await axios.get('/api/group');
             const allGroups = res.data.groups || res.data; // Adjust depending on API response
             const group = allGroups.find(g => g._id === currGroup);
             setMembers(group?.members || []);

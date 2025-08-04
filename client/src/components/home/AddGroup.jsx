@@ -15,7 +15,7 @@ const AddGroup = ({ updateGroup }) => {
         if (!currUser) return alert('User not logged in');
 
         try {
-            const res = await axios.post('http://localhost:3000/api/group', {
+            const res = await axios.post('/api/group', {
                 name: groupName.trim(),
                 members: [currUser._id],
                 createdBy: currUser._id,

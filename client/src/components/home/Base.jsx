@@ -27,13 +27,13 @@ const Base = () => {
     };
 
     const fetchTasks = async () => {
-        const data = await getData("http://localhost:3000/api/task");
+        const data = await getData("/api/task");
         setTasks(data.tasks); // assuming API returns { tasks: [...] }
     };
 
     const fetchGroups = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/group')
+            const response = await axios.get('/api/group')
             // console.log(response.data.groups)
             setGroups(response.data.groups)
         } catch (error) {
@@ -49,7 +49,7 @@ const Base = () => {
         }
 
         try {
-            const response = await axios.get(`http://localhost:3000/api/user/${currUser}`);
+            const response = await axios.get(`/api/user/${currUser}`);
             return response.data.user;
         } catch (error) {
             console.error("Failed to fetch user details:", error.message);

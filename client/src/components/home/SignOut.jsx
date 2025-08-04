@@ -5,7 +5,7 @@ const SignOut = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("user"); // optional: if you store user ID or info
     localStorage.removeItem("currUser"); // optional: if you store user ID or info
-    window.location.href = "http://localhost:5173/";
+    window.location.href = "/";
   };
 
   return (

@@ -13,7 +13,7 @@ const JoinGroup = ({ updateGroup }) => {
         if (!currUser || !inviteCode) return;
 
         try {
-            const response = await axios.put(`http://localhost:3000/api/group/${inviteCode}/join`, {
+            const response = await axios.put(`/api/group/${inviteCode}/join`, {
                 userId: currUser
             });
 

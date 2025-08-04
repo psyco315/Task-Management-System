@@ -29,7 +29,7 @@ const AddTask = ({ onTaskAdded }) => {
             var fileCount = 0
 
             try {
-                const res = await axios.put(`http://localhost:3000/api/task/${taskId}/upload`, formData, {
+                const res = await axios.put(`/api/task/${taskId}/upload`, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data"
                     }
@@ -111,7 +111,7 @@ const AddTask = ({ onTaskAdded }) => {
                 createdBy: currUser._id,
             }
 
-            const res = await axios.post('http://localhost:3000/api/task', taskData)
+            const res = await axios.post('/api/task', taskData)
             if (res.status === 201) {
                 setForm({
                     title: '',

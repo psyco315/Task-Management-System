@@ -7,7 +7,7 @@ const GroupCard = ({ group, onSelect, onContextMenu }) => {
   useEffect(() => {
     const fetchCreator = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/user/${group.createdBy}`);
+        const res = await axios.get(`/api/user/${group.createdBy}`);
         // console.log(res.data.user.email)
         setCreatorEmail(res.data.user.email);
       } catch (err) {

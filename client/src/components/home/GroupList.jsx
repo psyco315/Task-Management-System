@@ -39,7 +39,7 @@ const GroupList = ({ onSelect, updateGroup }) => {
             const confirm = window.confirm("Delete this group?");
             if (!confirm) return;
 
-            await axios.delete(`http://localhost:3000/api/group/${contextMenu.group._id}`);
+            await axios.delete(`/api/group/${contextMenu.group._id}`);
             updateGroup(); // Refresh group list
             handleCloseContext();
         } catch (err) {
@@ -120,7 +120,7 @@ const GroupList = ({ onSelect, updateGroup }) => {
                             <button
                                 onClick={async () => {
                                     try {
-                                        await axios.put(`http://localhost:3000/api/group/${editingGroup._id}`, { name: editName });
+                                        await axios.put(`/api/group/${editingGroup._id}`, { name: editName });
                                         updateGroup(); // Refresh list
                                         setEditingGroup(null);
                                     } catch (err) {

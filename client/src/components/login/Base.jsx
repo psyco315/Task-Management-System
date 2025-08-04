@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import SignIn from './SignIn.jsx';
 import SignUp from './SignUp.jsx';
 import SignMenu from './SignMenu.jsx';
