@@ -21,7 +21,7 @@ import notFoundMiddleware from './middleware/not-found.js'
 
 const dbKey = process.env.DBKEY;
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000
 
 // Serve static files from Vite build
 app.use(express.static(path.join(__dirname, '../client/dist')));
