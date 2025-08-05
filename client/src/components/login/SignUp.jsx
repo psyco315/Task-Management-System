@@ -37,6 +37,10 @@ const SignUp = () => {
       return setError("All fields are required.");
     }
 
+    if (password.length < 8) {
+      return setError("Password must be at least 8 characters long.");
+    }
+
     if (password !== confirmPassword) {
       return setError("Passwords do not match.");
     }

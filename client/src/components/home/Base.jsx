@@ -111,7 +111,7 @@ const Base = () => {
                         </div>
 
                         <div>
-                            { currGroup !== '' && (<Members currGroup={currGroup} />)}
+                            {currGroup !== '' && (<Members currGroup={currGroup} />)}
                         </div>
                     </div>
 
@@ -123,11 +123,11 @@ const Base = () => {
                             <div>Home</div>
                         </button>
 
-                        <button
+                        {/* <button
                             className="bg-white/40 text-black h-max px-4 py-2 rounded hover:bg-white/70"
                         >
                             <div>About</div>
-                        </button>
+                        </button> */}
 
                         <SignOut />
                     </div>
@@ -135,9 +135,26 @@ const Base = () => {
 
 
                 <div className="w-full h-full flex flex-col overflow-auto bg-white/80 text-black">
-                    <div className='pt-4 pl-6 opacity-50'>
-                        Right Click entries to edit them
-                    </div>
+                    {
+                        adminMode === true ?
+                            (
+                                <div className='pt-4 pl-6 opacity-50'>
+                                    Right Click entries to edit them
+                                </div>
+                            )
+                            :
+                            currGroup === '' ?
+                                (
+                                    <></>
+                                )
+                                :
+                                (
+                                    <div className='pt-4 pl-6 opacity-50'>
+                                        Right Click entries to edit them
+                                    </div>
+                                )
+                    }
+
                     {currGroup === '' ? (
                         <GroupList
                             onSelect={(id) => setCurrGroup(id)}
