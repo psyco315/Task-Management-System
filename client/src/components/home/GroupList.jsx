@@ -49,9 +49,9 @@ const GroupList = ({ onSelect, updateGroup }) => {
     };
 
     useEffect(() => {
+        console.log("Groups updated:", groups);
         if (groups.length > 0) {
             // console.log('Current user:', currUser)
-            // console.log("Groups updated:", groups);
         }
     }, [groups]);
 
