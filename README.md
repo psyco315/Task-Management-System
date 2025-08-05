@@ -1,12 +1,30 @@
-# React + Vite
+# Task Manager App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Deployed URL: https://task-management-system-88gq.onrender.com/group
 
-Currently, two official plugins are available:
+<br>
+ 
+### MUST READ BEFORE USING
+Even though you can create your own accounts, but for testing, you may use some already initialised accounts
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Admin Account
+email: parth2004batman@gmail.com <br>
+password: abcdefgh
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### User Accounts
+email: user@test.com <br>
+password: abcdefgh <br> <br>
+email: user2@test.com <br>
+password: abcdefgh <br> <br>
+email: user3@gmail.com <br>
+password: abcdefgh <br> <br>
+
+### Instructions
+
+<ul>
+  <li>Admin creates a group</li>
+  <li>Admin shares the invite code (found below the group name) with the users they wish to add</li>
+  <li>Users copy-paste the invite code</li>
+  <li>The only modification a user can do is change the status of a task</li>
+</ul>
