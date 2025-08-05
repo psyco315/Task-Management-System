@@ -1,6 +1,6 @@
 # Task Manager App
 
-Deployed URL: https://task-management-system-88gq.onrender.com/group
+Deployed URL: https://task-management-system-88gq.onrender.com/
 
 <br>
  
