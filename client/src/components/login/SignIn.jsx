@@ -9,7 +9,12 @@ const SignIn = () => {
   const navigate = useNavigate();
   const { setCurrUser } = useUser()
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    // Prevent default form submission if called from form
+    if (e) {
+      e.preventDefault();
+    }
+
     try {
       const res = await axios.post('/api/auth/signin', {
         email,
@@ -32,6 +37,8 @@ const SignIn = () => {
     }
   };
 
+
+
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     const user = localStorage.getItem('user');
@@ -42,33 +49,36 @@ const SignIn = () => {
     }
   }, []);
 
-
   return (
     <div className="flex flex-col justify-center items-center w-3/4 h-screen">
       <h2 className="text-3xl font-semibold mb-12 hover:cursor-default">Sign In</h2>
 
-      <input
-        type="email"
-        placeholder="Email"
-        className="w-4/5 mb-4 px-5 py-3 rounded-xl bg-white/10 text-white placeholder-white/70 backdrop-blur-md border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      <form onSubmit={handleLogin} className="w-full flex flex-col items-center">
+        <input
+          type="email"
+          placeholder="Email"
+          className="w-4/5 mb-4 px-5 py-3 rounded-xl bg-white/10 text-white placeholder-white/70 backdrop-blur-md border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
 
-      <input
-        type="password"
-        placeholder="Password"
-        className="w-4/5 mb-6 px-5 py-3 rounded-xl bg-white/10 text-white placeholder-white/70 backdrop-blur-md border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <input
+          type="password"
+          placeholder="Password"
+          className="w-4/5 mb-6 px-5 py-3 rounded-xl bg-white/10 text-white placeholder-white/70 backdrop-blur-md border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
-      <button
-        onClick={handleLogin}
-        className="bg-white/10 text-lg px-10 py-3 rounded-xl shadow-md border border-white/20 hover:bg-white/20 transition duration-150 ease-in-out hover:scale-[1.02] hover:shadow-xl cursor-pointer"
-      >
-        Sign In
-      </button>
+        <button
+          type="submit"
+          className="bg-white/10 text-lg px-10 py-3 rounded-xl shadow-md border border-white/20 hover:bg-white/20 transition duration-150 ease-in-out hover:scale-[1.02] hover:shadow-xl cursor-pointer"
+        >
+          Sign In
+        </button>
+      </form>
     </div>
   );
 };

@@ -80,6 +80,15 @@ const GroupList = ({ onSelect, updateGroup }) => {
             {!adminMode && (
                 <JoinGroup updateGroup={updateGroup} />
             )}
+
+            {groups.length == 0 ?
+                <div className='text-[30px] font-semibold text-black/30 pl-5 pt-10'>
+                    No Group Found
+                </div>
+                :
+                <></>
+            }
+
             {groups
                 .filter(group =>
                     group.members.some(member => member._id === currUser._id)

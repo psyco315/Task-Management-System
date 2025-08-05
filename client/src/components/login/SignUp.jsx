@@ -23,7 +23,12 @@ const SignUp = () => {
     }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    // Prevent default form submission if called from form
+    if (e) {
+      e.preventDefault();
+    }
+
     setError("");
 
     const { name, email, password, confirmPassword, role } = formData;
@@ -62,79 +67,85 @@ const SignUp = () => {
 
       {error && <p className="text-red-400 mb-4">{error}</p>}
 
-      <input
-        type="text"
-        name="name"
-        placeholder="Full Name"
-        value={formData.name}
-        onChange={handleChange}
-        className="w-4/5 mb-4 px-5 py-3 rounded-xl bg-white/10 text-white placeholder-white/70 backdrop-blur-md border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
-      />
+      <form onSubmit={handleSubmit} className="w-full flex flex-col items-center">
+        <input
+          type="text"
+          name="name"
+          placeholder="Full Name"
+          value={formData.name}
+          onChange={handleChange}
+          className="w-4/5 mb-4 px-5 py-3 rounded-xl bg-white/10 text-white placeholder-white/70 backdrop-blur-md border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
+          required
+        />
 
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        value={formData.email}
-        onChange={handleChange}
-        className="w-4/5 mb-4 px-5 py-3 rounded-xl bg-white/10 text-white placeholder-white/70 backdrop-blur-md border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
-      />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          className="w-4/5 mb-4 px-5 py-3 rounded-xl bg-white/10 text-white placeholder-white/70 backdrop-blur-md border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
+          required
+        />
 
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={formData.password}
-        onChange={handleChange}
-        className="w-4/5 mb-4 px-5 py-3 rounded-xl bg-white/10 text-white placeholder-white/70 backdrop-blur-md border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
-      />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+          className="w-4/5 mb-4 px-5 py-3 rounded-xl bg-white/10 text-white placeholder-white/70 backdrop-blur-md border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
+          required
+        />
 
-      <input
-        type="password"
-        name="confirmPassword"
-        placeholder="Confirm Password"
-        value={formData.confirmPassword}
-        onChange={handleChange}
-        className="w-4/5 mb-4 px-5 py-3 rounded-xl bg-white/10 text-white placeholder-white/70 backdrop-blur-md border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
-      />
+        <input
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          className="w-4/5 mb-4 px-5 py-3 rounded-xl bg-white/10 text-white placeholder-white/70 backdrop-blur-md border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
+          required
+        />
 
-      {/* Role Selection - Radio Buttons */}
-      <div className="w-4/5 mb-6">
-        <label className="block text-white/90 text-sm font-medium mb-3">
-          Select Role
-        </label>
-        <div className="flex gap-6">
-          <label className="flex items-center text-white/90 cursor-pointer">
-            <input
-              type="radio"
-              name="role"
-              value="user"
-              checked={formData.role === "user"}
-              onChange={handleChange}
-              className="mr-2 accent-white/70"
-            />
-            User
+        {/* Role Selection - Radio Buttons */}
+        <div className="w-4/5 mb-6">
+          <label className="block text-white/90 text-sm font-medium mb-3">
+            Select Role
           </label>
-          <label className="flex items-center text-white/90 cursor-pointer">
-            <input
-              type="radio"
-              name="role"
-              value="admin"
-              checked={formData.role === "admin"}
-              onChange={handleChange}
-              className="mr-2 accent-white/70"
-            />
-            Admin
-          </label>
+          <div className="flex gap-6">
+            <label className="flex items-center text-white/90 cursor-pointer">
+              <input
+                type="radio"
+                name="role"
+                value="user"
+                checked={formData.role === "user"}
+                onChange={handleChange}
+                className="mr-2 accent-white/70"
+              />
+              User
+            </label>
+            <label className="flex items-center text-white/90 cursor-pointer">
+              <input
+                type="radio"
+                name="role"
+                value="admin"
+                checked={formData.role === "admin"}
+                onChange={handleChange}
+                className="mr-2 accent-white/70"
+              />
+              Admin
+            </label>
+          </div>
         </div>
-      </div>
 
-      <button
-        onClick={handleSubmit}
-        className="bg-white/10 text-lg px-10 py-3 rounded-xl shadow-md border border-white/20 hover:bg-white/20 transition duration-150 ease-in-out hover:scale-[1.02] hover:shadow-xl cursor-pointer"
-      >
-        Sign Up
-      </button>
+        <button
+          type="submit"
+          className="bg-white/10 text-lg px-10 py-3 rounded-xl shadow-md border border-white/20 hover:bg-white/20 transition duration-150 ease-in-out hover:scale-[1.02] hover:shadow-xl cursor-pointer"
+        >
+          Sign Up
+        </button>
+      </form>
     </div>
   );
 };
