@@ -72,6 +72,8 @@ const GroupList = ({ onSelect, updateGroup }) => {
         };
     }, [contextMenu]);
 
+
+
     return (
         <div className="w-full h-full flex-1 overflow-auto flex flex-wrap relative">
             {adminMode && (
@@ -81,26 +83,26 @@ const GroupList = ({ onSelect, updateGroup }) => {
                 <JoinGroup updateGroup={updateGroup} />
             )}
 
-            {groups.length == 0 ?
-                <div className='text-[30px] font-semibold text-black/30 pl-5 pt-10'>
-                    No Group Found
-                </div>
-                :
-                <></>
-            }
-
-            {groups
-                .filter(group =>
+            {(() => {
+                const userGroups = groups.filter(group =>
                     group.members.some(member => member._id === currUser._id)
-                )
-                .map(group => (
-                    <GroupCard
-                        key={group._id}
-                        group={group}
-                        onSelect={() => onSelect(group._id)}
-                        onContextMenu={(e) => handleRightClick(e, group)}
-                    />
-                ))}
+                );
+
+                return userGroups.length > 0 ? (
+                    userGroups.map(group => (
+                        <GroupCard
+                            key={group._id}
+                            group={group}
+                            onSelect={() => onSelect(group._id)}
+                            onContextMenu={(e) => handleRightClick(e, group)}
+                        />
+                    ))
+                ) : (
+                    <div className='text-[30px] font-semibold text-black/30 pl-5 pt-10'>
+                        No Group Found
+                    </div>
+                );
+            })()}
 
 
 
